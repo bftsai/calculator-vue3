@@ -11,10 +11,6 @@
   <RouterView />
 </template>
 
-<script>
-// import { RouterLink, RouterView } from 'vue-router'
-</script>
-
 <style lang="css">
 header{
   padding-top: 32px;
