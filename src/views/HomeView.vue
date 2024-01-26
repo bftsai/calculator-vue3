@@ -66,8 +66,10 @@ export default {
         this.symbol = '';
         this.str = '-0';
       }else{
-        this.symbol = e.target.textContent;
-        this.str = '0';
+        if(!this.symbol){
+          this.symbol = e.target.textContent;
+          this.str = '0';
+        }
       }
     },
     storeNum(e){
