@@ -66,6 +66,7 @@ export default {
         this.symbol = '';
         this.str = '-0';
       }else{
+        // 將判斷是拿掉，內容保留，可實現更換符號功能。
         if(!this.symbol){
           this.symbol = e.target.textContent;
           this.str = '0';
