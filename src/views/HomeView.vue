@@ -67,7 +67,7 @@ export default {
         this.str = '-0';
       }else{
         // 將判斷是拿掉，內容保留，可實現更換符號功能。
-        if(!this.symbol){
+        if(!this.symbol || this.symbol === '='){
           this.symbol = e.target.textContent;
           this.str = '0';
         }
@@ -110,9 +110,22 @@ export default {
       this.store2 = 0;
       this.str = '0';
       this.counting = true;
-      if((String(this.total).length > 10 && this.total > 0) || (String(this.total).length > 11 && this.total < 0)){
-        alert('數值過大無法計算!');
-        this.reset();
+      this.checkTotal();
+    },
+    checkTotal(){
+      const regInt = new RegExp('^-?[\\d]{0,10}$');
+      const regFloat = new RegExp('^-?\\d{0,10}.[\\d]{0,2}$');
+      
+      if(String(this.total).includes('.')){
+        if(!regFloat.test(this.total)){
+          this.reset();
+          alert('數值過大，無法計算！！！');
+        }
+      }else{
+        if(!regInt.test(this.total)){
+          this.reset();
+          alert('數值過大，無法計算！！！');
+        }
       }
     }
   },
