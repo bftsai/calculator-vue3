@@ -4,7 +4,7 @@
     <div class="calculator">
       <div class="position-relative mb-20">
         <div class="position-absolute top-15 start-20">{{ symbol }}</div>
-        <p class="text-end fs-2 fw-bold border-2 rounded-5 p-10">{{ symbol === '=' ? total : Object.is(Number(str),-0)? '-0' : Number(str) }}</p>
+        <p class="text-end fs-2 fw-bold border-2 rounded-5 p-10">{{ symbol === '=' ? store1? store1 : total : Object.is(Number(str),-0)? '-0' : Number(str) }}</p>
         <p class="text-danger fw-bold text-end" v-if="prompt">最多 10 位數！！！</p>
       </div>
       <div class="btnArea">
@@ -47,9 +47,9 @@ export default {
   },
   watch: {
     str(){
-      const reg = new RegExp('^-?[\\d]{1,9}$');
-      !this.symbol? this.store1 = Number(this.str) : this.counting? this.store1 = Number(this.str) : this.store2 = Number(this.str);
-      !reg.test(Number(this.str))? this.prompt = true : this.prompt = false;
+      const reg = RegExp('^-?[\\d]{0,10}$');
+      !this.symbol || this.counting? this.store1 = Number(this.str) : this.store2 = Number(this.str);
+      reg.test(Number(this.str))? this.prompt = false : '';
     }
   },
   methods :{
@@ -60,22 +60,26 @@ export default {
       this.total = 0;
       this.symbol = '';
       this.counting = false;
+      this.prompt = false;
     },
     switchSymbol(e){
       if(!this.counting && e.target.textContent === '-' && this.store1 === 0){
         this.symbol = '';
         this.str = '-0';
       }else{
-        // 將判斷是拿掉，內容保留，可實現更換符號功能。
-        if(!this.symbol || this.symbol === '='){
-          this.symbol = e.target.textContent;
+        const reg = new RegExp('^[+-/\\*]$');
+        if(reg.test(this.symbol)){
+          return;
+        }else{
+          this.store1? this.total = this.store1 : '';
           this.str = '0';
+          this.symbol = e.target.textContent;
         }
       }
     },
     storeNum(e){
       const reg = new RegExp('^-?[\\d]{1,9}$');
-      reg.test(Number(this.str))? this.str += e.target.textContent : '';
+      reg.test(Number(this.str))? this.str += e.target.textContent : this.prompt = true;
     },
     del(){
       this.str.slice(0,-1) === '-' ? this.str = '0' : this.str = this.str.slice(0,-1);
@@ -87,6 +91,11 @@ export default {
         this.symbol === '+'? this.total += this.store1 : this.symbol === '-'? this.total -= this.store1 : this.symbol === '*'? this.total *= this.store1 : '';
 
         if(this.symbol === '/'){
+          if(!this.store1){
+            alert('除數不得為零！！！');
+            this.reset();
+            return;
+          }
           if(this.total % this.store1){
             reg.test((this.total /= this.store1).toFixed(2))? this.total = 0 : this.total = (this.total /= this.store1).toFixed(2);
           }else{
@@ -97,6 +106,11 @@ export default {
         this.symbol === '+'? (this.total = this.store1 + this.store2) : this.store1 < 0? (this.total = this.store1 - this.store2) : this.symbol === '-'? (this.total = this.store1 - this.store2) : this.symbol === '*'? (this.total = this.store1 * this.store2) : '';
         
         if(this.symbol === '/'){
+          if(!this.store2){
+            alert('除數不得為零！！！');
+            this.reset();
+            return;
+          }
           if(this.store1 % this.store2){
             reg.test((this.store1 / this.store2).toFixed(2))? this.total = 0 : this.total = (this.store1 / this.store2).toFixed(2);
           }else{
