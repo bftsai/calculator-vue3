@@ -82,6 +82,7 @@ export default {
       reg.test(Number(this.str))? this.str += e.target.textContent : this.prompt = true;
       if(this.symbol === '='){
         this.symbol = '';
+        this.total = 0;
       }
     },
     del(){
