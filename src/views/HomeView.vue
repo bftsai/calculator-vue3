@@ -80,6 +80,9 @@ export default {
     storeNum(e){
       const reg = new RegExp('^-?[\\d]{1,9}$');
       reg.test(Number(this.str))? this.str += e.target.textContent : this.prompt = true;
+      if(this.symbol === '='){
+        this.symbol = '';
+      }
     },
     del(){
       this.str.slice(0,-1) === '-' ? this.str = '0' : this.str = this.str.slice(0,-1);
