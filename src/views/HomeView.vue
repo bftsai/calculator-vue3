@@ -48,7 +48,7 @@ export default {
   watch: {
     str(){
       const reg = RegExp('^-?[\\d]{0,10}$');
-      !this.symbol || this.counting? this.store1 = Number(this.str) : this.store2 = Number(this.str);
+      this.counting? this.store1 = Number(this.str) : this.store2 = Number(this.str);
       reg.test(Number(this.str))? this.prompt = false : '';
     }
   },
@@ -63,18 +63,13 @@ export default {
       this.prompt = false;
     },
     switchSymbol(e){
-      if(!this.counting && e.target.textContent === '-' && this.store1 === 0){
-        this.symbol = '';
-        this.str = '-0';
+      const reg = new RegExp('^[+-/\\*]$');
+      if(reg.test(this.symbol)){
+        return;
       }else{
-        const reg = new RegExp('^[+-/\\*]$');
-        if(reg.test(this.symbol)){
-          return;
-        }else{
-          this.store1? this.total = this.store1 : '';
-          this.str = '0';
-          this.symbol = e.target.textContent;
-        }
+        this.store1? this.total = this.store1 : '';
+        this.str = '0';
+        this.symbol = e.target.textContent;
       }
     },
     storeNum(e){
@@ -100,7 +95,7 @@ export default {
             return;
           }
           if(this.total % this.store1){
-            reg.test((this.total /= this.store1).toFixed(2))? this.total = 0 : this.total = (this.total /= this.store1).toFixed(2);
+            reg.test((this.total /= this.store1).toFixed(2))? this.total = 0 : this.total = Number((this.total /= this.store1).toFixed(2));
           }else{
             this.total = this.total /= this.store1;
           }
@@ -115,7 +110,7 @@ export default {
             return;
           }
           if(this.store1 % this.store2){
-            reg.test((this.store1 / this.store2).toFixed(2))? this.total = 0 : this.total = (this.store1 / this.store2).toFixed(2);
+            reg.test((this.store1 / this.store2).toFixed(2))? this.total = 0 : this.total = Number((this.store1 / this.store2).toFixed(2));
           }else{
             this.total = this.store1 / this.store2;
           }
@@ -135,13 +130,17 @@ export default {
       
       if(String(this.total).includes('.')){
         if(!regFloat.test(this.total)){
-          this.reset();
-          alert('數值過大，無法計算！！！');
+          console.log(this);
+          console.log(!regFloat.test(this.total));
+          // this.reset();
+          // alert('數值過大，無法計算！！！');
         }
       }else{
         if(!regInt.test(this.total)){
-          this.reset();
-          alert('數值過大，無法計算！！！');
+          console.log(this);
+          console.log(!regInt.test(this.total));
+          // this.reset();
+          // alert('數值過大，無法計算！！！');
         }
       }
     }
