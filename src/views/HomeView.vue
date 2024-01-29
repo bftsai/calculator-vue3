@@ -63,18 +63,13 @@ export default {
       this.prompt = false;
     },
     switchSymbol(e){
-      if(!this.counting && e.target.textContent === '-' && this.store1 === 0){
-        this.symbol = '';
-        this.str = '-0';
+      const reg = new RegExp('^[+-/\\*]$');
+      if(reg.test(this.symbol)){
+        return;
       }else{
-        const reg = new RegExp('^[+-/\\*]$');
-        if(reg.test(this.symbol)){
-          return;
-        }else{
-          this.store1? this.total = this.store1 : '';
-          this.str = '0';
-          this.symbol = e.target.textContent;
-        }
+        this.store1? this.total = this.store1 : '';
+        this.str = '0';
+        this.symbol = e.target.textContent;
       }
     },
     storeNum(e){
@@ -103,7 +98,7 @@ export default {
             return;
           }
           if(this.total % this.store1){
-            reg.test((this.total /= this.store1).toFixed(2))? this.total = 0 : this.total = (this.total /= this.store1).toFixed(2);
+            reg.test((this.total /= this.store1).toFixed(2))? this.total = 0 : this.total = Number((this.total /= this.store1).toFixed(2));
           }else{
             this.total = this.total /= this.store1;
           }
@@ -118,7 +113,7 @@ export default {
             return;
           }
           if(this.store1 % this.store2){
-            reg.test((this.store1 / this.store2).toFixed(2))? this.total = 0 : this.total = (this.store1 / this.store2).toFixed(2);
+            reg.test((this.store1 / this.store2).toFixed(2))? this.total = 0 : this.total = Number((this.store1 / this.store2).toFixed(2));
           }else{
             this.total = this.store1 / this.store2;
           }
